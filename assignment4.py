@@ -36,6 +36,8 @@ class Nudibranch:
         self.locus = ()
         #geneotype var
         self.geneotype = ""
+        self.motherAllele = 0
+        self.fatherAllele = 0
     #method that models reproduction by changing number of offspring they can create
     def reproduce(self):
         self.offspring=5
@@ -43,9 +45,11 @@ class Nudibranch:
     def growOld(self):
         self.age+=1
 
-    #method that takes allele from father and mother 
+    #method that takes allele from father and mother and sets to baby instance of Nudibranch
     def setGenotype(self, motherAllele, fatherAllele):
-    	baby = motherAllele + fatherAllele
+        baby = Nudibranch()
+        baby.motherAllele = motherAllele
+        baby.fatherAllele = fatherAllele
 
 #Initalize and propograte my popoulation with nudes
 
