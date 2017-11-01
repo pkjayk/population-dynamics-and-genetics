@@ -20,7 +20,6 @@ geneticDiversity=[]
 Nevalues=[]
 NeNratio=[]
 
-baby = None
 
 #make a population model
 class Nudibranch:
@@ -31,13 +30,11 @@ class Nudibranch:
         #all nudes start with 0 offspring
         self.offspring=0
         #assign sex, randomly 0 or 1
-        self.sex = np.random.randint(0, 1)
+        self.sex = np.random.randint(2)
         #locus list
         self.locus = ()
         #geneotype var
-        self.geneotype = ""
-        self.motherAllele = 0
-        self.fatherAllele = 0
+        self.genotype = self.randomGenotype()
     #method that models reproduction by changing number of offspring they can create
     def reproduce(self):
         self.offspring=5
@@ -45,22 +42,46 @@ class Nudibranch:
     def growOld(self):
         self.age+=1
 
+    def randomGenotype(self):
+        randomGenotypes = np.random.randint(2, size = 2)
+
+        randomGt = []
+        randomGt.append(randomGenotypes[0])
+        randomGt.append(randomGenotypes[1])
+
+        return randomGt
+
     #method that takes allele from father and mother and sets to baby instance of Nudibranch
     def setGenotype(self, motherAllele, fatherAllele):
-        baby = Nudibranch()
-        baby.motherAllele = motherAllele
-        baby.fatherAllele = fatherAllele
+        baby.genotype[0] = motherAllele
+        baby.genotype[1] = fatherAllele
 
-#Initalize and propograte my popoulation with nudes
+def freqAllele(population, alleleIdentifier):
+    alleleCount = 0
+    for nudibranch in population:
+        # check first allele for identifier 
+        if nudibranch.genotype[0] == alleleIdentifier:
+            alleleCount += 1
+        # check second allele for identifier 
+        if nudibranch.genotype[1] == alleleIdentifier:
+            alleleCount += 1
 
+    return alleleCount
+
+
+
+
+#Initalize and propograte my popoulation with nudes -- these are all the babies to start with.
 for i in range(InitialPopSize):
     #ADD CODE FOR PART 2A
+    baby = Nudibranch()
 
     Population.append(baby)
 
     #USE FUNCTION FROM PART 3 TO CALCULATE FREQUENCIES FOR ALLELES 0 AND 1
-    p_init =
-    q_init =
+
+p_init = freqAllele(Population, 0)
+q_init = freqAllele(Population, 1)
 
 #Run a population model for 1000 time steps
 for j in range(200):
@@ -96,10 +117,17 @@ for j in range(200):
     #ADD CODE FOR PART 4
 
     #USE THIS VARIABLE TO HOLD CALCULATED HETEROZYGOSITY
-    heterozygosity=
+    for nudibranch in Population:
+        heterozygotes = 0
+        if (nudibranch.genotype[0] == 1 and nudibranch.genotype[1] == 0) or (nudibranch.genotype[0] == 0 and nudibranch.genotype[1] == 1):
+            heterozygotes += 1
+
+    heterozygosity = heterozygotes / N
+
+    print(heterozygosity)
     #USE FUNCTION FROM PART 3 TO CALCULATE FREQUENCIES FOR ALLELES 0 AND 1
-    p_freq =
-    q_freq =
+    p_freq = freqAllele(Population, 0)
+    q_freq = freqAllele(Population, 1)
     #Calculate effective population size
     var_p = (p_init*q_init)/(2*N)
     Ne=(p_freq*q_freq)/(2*var_p)
@@ -135,10 +163,10 @@ for j in range(200):
     #print "Population Size: %d; Number of Offspring: %d" % (len(Population), NumOffspring)
     Popsizes.append(len(Population))
     #add new offspring to the population
-    for i in range(NumOffspring):
+'''    for i in range(NumOffspring):
 
         #ADD/COMPLETE CODE FOR PART 2B
-        female =
+        female = 
         male =
         allele1 =
         allele2 =
@@ -169,4 +197,4 @@ pyplot.subplot(224)
 pyplot.title("N")
 pyplot.plot(Popsizes)
 pyplot.grid(True)
-pyplot.show()
+pyplot.show()'''
