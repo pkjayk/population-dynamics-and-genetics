@@ -1,5 +1,6 @@
 import numpy as np
 from matplotlib import pyplot
+import random
 
 
 #set age of first reproduction
@@ -68,7 +69,18 @@ def freqAllele(population, alleleIdentifier):
 
     return alleleCount
 
+def getRandomParentAllele(population, sex):
+    rightSex = False
+    
+    while rightSex == False:
+        randomParent = random.choice(population)
+        if randomParent.sex == sex:
+            allele = randomParent.genotype[sex]
+            rightSex = True
+        else:
+            continue
 
+    return allele
 
 
 #Initalize and propograte my popoulation with nudes -- these are all the babies to start with.
@@ -116,6 +128,8 @@ for j in range(200):
         break
     #ADD CODE FOR PART 4
 
+    print("Total died:" + str(len(died)))
+
     #USE THIS VARIABLE TO HOLD CALCULATED HETEROZYGOSITY
     for nudibranch in Population:
         heterozygotes = 0
@@ -160,16 +174,16 @@ for j in range(200):
     #use a for loop to count all the offspring in the population
     for i in range(len(females)):
         NumOffspring+=females[i].offspring
-    #print "Population Size: %d; Number of Offspring: %d" % (len(Population), NumOffspring)
+    print("Population Size: %d; Number of Offspring: %d" % (len(Population), NumOffspring))
     Popsizes.append(len(Population))
     #add new offspring to the population
-'''    for i in range(NumOffspring):
+    for i in range(NumOffspring):
 
         #ADD/COMPLETE CODE FOR PART 2B
-        female = 
-        male =
-        allele1 =
-        allele2 =
+        #female = 
+        #male =
+        allele1 = getRandomParentAllele(Population, 0)
+        allele2 = getRandomParentAllele(Population, 1)
 
 
         Population.append(baby)
@@ -178,6 +192,8 @@ for j in range(200):
 
     for i in range(len(Population)):
         Population[i].offspring=0
+
+
 
 #Plot results of Population dynamics
 pyplot.figure(1)
@@ -197,4 +213,4 @@ pyplot.subplot(224)
 pyplot.title("N")
 pyplot.plot(Popsizes)
 pyplot.grid(True)
-pyplot.show()'''
+pyplot.show()
