@@ -52,10 +52,10 @@ class Nudibranch:
 
         return randomGt
 
-    #method that takes allele from father and mother and sets to baby instance of Nudibranch
+    #method that takes allele from father and mother and sets to new instance of Nudibranch
     def setGenotype(self, motherAllele, fatherAllele):
-        baby.genotype[0] = motherAllele
-        baby.genotype[1] = fatherAllele
+        self.genotype[0] = motherAllele
+        self.genotype[1] = fatherAllele
 
 def freqAllele(population, alleleIdentifier):
     alleleCount = 0
@@ -69,6 +69,7 @@ def freqAllele(population, alleleIdentifier):
 
     return alleleCount
 
+# need to fix
 def getRandomParentAllele(population, sex):
     rightSex = False
     
@@ -89,6 +90,8 @@ for i in range(InitialPopSize):
     baby = Nudibranch()
 
     Population.append(baby)
+
+    print(len(Population))
 
     #USE FUNCTION FROM PART 3 TO CALCULATE FREQUENCIES FOR ALLELES 0 AND 1
 
@@ -184,8 +187,9 @@ for j in range(200):
         #male =
         allele1 = getRandomParentAllele(Population, 0)
         allele2 = getRandomParentAllele(Population, 1)
+        print("Parent 1 Allele:" + str(allele1) + " Parent 2 Allele: " + str(allele2))
 
-
+        # make sure to set genotype here
         Population.append(baby)
     #Reset some variable
     NumOffspring=0
