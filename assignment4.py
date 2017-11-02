@@ -4,13 +4,13 @@ import random
 
 
 #set age of first reproduction
-ageOfMaturity=4
+ageOfMaturity = 4
 #set some population parameters
 CarryCapacity = 200 #int(raw_input("Carrying Capacity?\n"))
 #define initial population size
 InitialPopSize = 200 #int(raw_input("Initial Population Size?\n"))
 #value to simulate role of a fluctuating environment in population dynamics
-environmentalVariation=100
+environmentalVariation=0
 #Create an empty list called Population
 Population=[]
 #Create variable to measure number of annual offspring
@@ -42,7 +42,9 @@ class Nudibranch:
     def growOld(self):
         self.age+=1
 
+    #method that selects a random set of alleles
     def randomGenotype(self):
+        # get two random integers, both either 0 or 1
         randomGenotypes = np.random.randint(2, size = 2)
 
         randomGt = []
@@ -56,6 +58,7 @@ class Nudibranch:
         self.locus[0] = motherAllele
         self.locus[1] = fatherAllele
 
+# calculates the frequency of an allele in a population
 def freqAllele(population, alleleIdentifier):
     alleleCount = 0
     for nudibranch in population:
@@ -68,16 +71,19 @@ def freqAllele(population, alleleIdentifier):
 
     return alleleCount
 
-# need to fix
+# gets a random parent of the right sex
 def getRandomParentAllele(population, sex):
     rightSex = False
     
     while rightSex == False:
+        # gets a random list item
         randomParent = random.choice(population)
+        # checks to make sure if the sex matches - if so, return
         if randomParent.sex == sex:
             allele = randomParent.locus[sex]
             rightSex = True
-        else:
+        # if sex doesn't match, restart the loop
+        else: 
             continue
 
     return allele
@@ -90,8 +96,7 @@ for i in range(InitialPopSize):
 
     Population.append(baby)
 
-    #USE FUNCTION FROM PART 3 TO CALCULATE FREQUENCIES FOR ALLELES 0 AND 1
-
+# calculate frequencies of initial population
 p_init = freqAllele(Population, 0)
 q_init = freqAllele(Population, 1)
 
@@ -131,13 +136,21 @@ for j in range(200):
     #print("Total died:" + str(len(died)))
 
     #USE THIS VARIABLE TO HOLD CALCULATED HETEROZYGOSITY
-    for nudibranch in Population:
-        heterozygotes = 0
-        if (nudibranch.locus[0] == 1 and nudibranch.locus[1] == 0) or (nudibranch.locus[0] == 0 and nudibranch.locus[1] == 1):
+    #heterzgote and homozygote count
+    heterozygotes = 0
+    homozygotes   = 0
+    # loop through population to count heterzygotes
+    for i in Population:
+        # logic to find heterozygote
+        if (i.locus[0] == 1 and i.locus[1] == 0) or (i.locus[0] == 0 and i.locus[1] == 1):
             heterozygotes += 1
+        else:
+            homozygotes += 1
 
+    # get heterozgosity for time step
     heterozygosity = heterozygotes / N
 
+    # append to genetic diversity list
     geneticDiversity.append(heterozygosity)
 
     #USE FUNCTION FROM PART 3 TO CALCULATE FREQUENCIES FOR ALLELES 0 AND 1
@@ -186,21 +199,19 @@ for j in range(200):
     #add new offspring to the population
     for i in range(NumOffspring):
 
-        #ADD/COMPLETE CODE FOR PART 2B
-        #female = 
-        #male =
+        # get random parent allele
         allele1 = getRandomParentAllele(Population, 0)
         allele2 = getRandomParentAllele(Population, 1)
-        #print("Parent 1 Allele:" + str(allele1) + " Parent 2 Allele: " + str(allele2))
 
-        # make sure to set genotype here
+        # make sure to set genotype here from parents alleles
         baby = Nudibranch()
         baby.setGenotype(allele1, allele2)
 
+        # append to population list
         Population.append(baby)
+
     #Reset some variable
     NumOffspring=0
-
     for i in range(len(Population)):
         Population[i].offspring=0
 
