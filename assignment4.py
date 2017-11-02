@@ -10,7 +10,7 @@ CarryCapacity = 200 #int(raw_input("Carrying Capacity?\n"))
 #define initial population size
 InitialPopSize = 200 #int(raw_input("Initial Population Size?\n"))
 #value to simulate role of a fluctuating environment in population dynamics
-environmentalVariation=500
+environmentalVariation=100
 #Create an empty list called Population
 Population=[]
 #Create variable to measure number of annual offspring
@@ -33,9 +33,8 @@ class Nudibranch:
         #assign sex, randomly 0 or 1
         self.sex = np.random.randint(2)
         #locus list
-        self.locus = ()
-        #geneotype var
-        self.genotype = self.randomGenotype()
+        self.locus = self.randomGenotype()
+
     #method that models reproduction by changing number of offspring they can create
     def reproduce(self):
         self.offspring=5
@@ -54,17 +53,17 @@ class Nudibranch:
 
     #method that takes allele from father and mother and sets to new instance of Nudibranch
     def setGenotype(self, motherAllele, fatherAllele):
-        self.genotype[0] = motherAllele
-        self.genotype[1] = fatherAllele
+        self.locus[0] = motherAllele
+        self.locus[1] = fatherAllele
 
 def freqAllele(population, alleleIdentifier):
     alleleCount = 0
     for nudibranch in population:
         # check first allele for identifier 
-        if nudibranch.genotype[0] == alleleIdentifier:
+        if nudibranch.locus[0] == alleleIdentifier:
             alleleCount += 1
         # check second allele for identifier 
-        if nudibranch.genotype[1] == alleleIdentifier:
+        if nudibranch.locus[1] == alleleIdentifier:
             alleleCount += 1
 
     return alleleCount
@@ -76,7 +75,7 @@ def getRandomParentAllele(population, sex):
     while rightSex == False:
         randomParent = random.choice(population)
         if randomParent.sex == sex:
-            allele = randomParent.genotype[sex]
+            allele = randomParent.locus[sex]
             rightSex = True
         else:
             continue
@@ -90,8 +89,6 @@ for i in range(InitialPopSize):
     baby = Nudibranch()
 
     Population.append(baby)
-
-    print(len(Population))
 
     #USE FUNCTION FROM PART 3 TO CALCULATE FREQUENCIES FOR ALLELES 0 AND 1
 
@@ -131,23 +128,30 @@ for j in range(200):
         break
     #ADD CODE FOR PART 4
 
-    print("Total died:" + str(len(died)))
+    #print("Total died:" + str(len(died)))
 
     #USE THIS VARIABLE TO HOLD CALCULATED HETEROZYGOSITY
     for nudibranch in Population:
         heterozygotes = 0
-        if (nudibranch.genotype[0] == 1 and nudibranch.genotype[1] == 0) or (nudibranch.genotype[0] == 0 and nudibranch.genotype[1] == 1):
+        if (nudibranch.locus[0] == 1 and nudibranch.locus[1] == 0) or (nudibranch.locus[0] == 0 and nudibranch.locus[1] == 1):
             heterozygotes += 1
 
     heterozygosity = heterozygotes / N
 
-    print(heterozygosity)
+    geneticDiversity.append(heterozygosity)
+
     #USE FUNCTION FROM PART 3 TO CALCULATE FREQUENCIES FOR ALLELES 0 AND 1
     p_freq = freqAllele(Population, 0)
     q_freq = freqAllele(Population, 1)
     #Calculate effective population size
     var_p = (p_init*q_init)/(2*N)
     Ne=(p_freq*q_freq)/(2*var_p)
+
+    Nevalues.append(Ne)
+
+    NeN = Ne/N
+    NeNratio.append(NeN)
+
     #hold onto current population allele frequencies for next loop to calculate Ne
     p_freq = p_init
     q_freq = q_init
@@ -177,7 +181,7 @@ for j in range(200):
     #use a for loop to count all the offspring in the population
     for i in range(len(females)):
         NumOffspring+=females[i].offspring
-    print("Population Size: %d; Number of Offspring: %d" % (len(Population), NumOffspring))
+    #print("Population Size: %d; Number of Offspring: %d" % (len(Population), NumOffspring))
     Popsizes.append(len(Population))
     #add new offspring to the population
     for i in range(NumOffspring):
@@ -187,9 +191,12 @@ for j in range(200):
         #male =
         allele1 = getRandomParentAllele(Population, 0)
         allele2 = getRandomParentAllele(Population, 1)
-        print("Parent 1 Allele:" + str(allele1) + " Parent 2 Allele: " + str(allele2))
+        #print("Parent 1 Allele:" + str(allele1) + " Parent 2 Allele: " + str(allele2))
 
         # make sure to set genotype here
+        baby = Nudibranch()
+        baby.setGenotype(allele1, allele2)
+
         Population.append(baby)
     #Reset some variable
     NumOffspring=0
